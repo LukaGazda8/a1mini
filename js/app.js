@@ -151,7 +151,7 @@
   });
 
   // Set default date to today
-  document.getElementById('log-date').valueAsDate = new Date();
+  var _today = new Date(); document.getElementById('log-date').value = _today.getFullYear() + '-' + String(_today.getMonth()+1).padStart(2,'0') + '-' + String(_today.getDate()).padStart(2,'0');
   renderLogs();
 
   // ── Maintenance Reminders ────────────────────────────────
