@@ -63,9 +63,9 @@
     var bed = parseInt(document.getElementById('bed-temp').value) || 0;
     var progress = parseInt(document.getElementById('print-progress').value) || 0;
 
-    document.getElementById('nozzle-bar').style.width = Math.min(100, (nozzle / 300) * 100) + '%';
-    document.getElementById('bed-bar').style.width = Math.min(100, (bed / 80) * 100) + '%';
-    document.getElementById('progress-bar').style.width = Math.min(100, progress) + '%';
+    document.getElementById('nozzle-bar').style.width = Math.max(0, Math.min(100, (nozzle / 300) * 100)) + '%';
+    document.getElementById('bed-bar').style.width = Math.max(0, Math.min(100, (bed / 80) * 100)) + '%';
+    document.getElementById('progress-bar').style.width = Math.max(0, Math.min(100, progress)) + '%';
   }
 
   document.getElementById('state-select').addEventListener('change', updateStatusDisplay);
