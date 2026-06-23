@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bambu Lab A1 mini – Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">A1<span>mini</span></a>
+      <ul class="nav-links">
+        <li><a href="#status">Status</a></li>
+        <li><a href="#maintenance-log">Servisn&yacute; z&aacute;znam</a></li>
+        <li><a href="#reminders">Pripomienky</a></li>
+        <li><a href="#specs">Technick&eacute; &uacute;daje</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Bambu Lab A1 mini</div>
+    <h1>Printer<br><em>Monitor</em></h1>
+    <p class="hero-sub">Sledovanie stavu, &uacute;dr&zcaron;ba a servisn&yacute; denn&iacute;k tla&ccaron;iarne Bambu Lab A1 mini.</p>
+  </section>
+
+  <!-- PRINTER STATUS -->
+  <section class="section" id="status">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Preh&iacute;ad</div>
+        <div class="section-title">Stav tla&ccaron;iarne</div>
+      </div>
+
+      <div class="status-grid">
+        <!-- Printer State -->
+        <div class="status-card status-card--main">
+          <div class="status-card-header">
+            <span class="status-card-icon">&#x1F5A8;</span>
+            <span class="status-card-label">Stav tla&ccaron;iarne</span>
+          </div>
+          <div class="status-indicator" id="printer-state">
+            <span class="status-dot status-dot--idle"></span>
+            <span class="status-text" id="printer-state-text">Idle</span>
+          </div>
+          <div class="status-select-wrap">
+            <select id="state-select" class="fs-select">
+              <option value="idle">Idle (ne&ccaron;inn&aacute;)</option>
+              <option value="printing">Tla&ccaron;&iacute;</option>
+              <option value="paused">Pozastaven&aacute;</option>
+              <option value="error">Chyba</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Nozzle Temp -->
+        <div class="status-card">
+          <div class="status-card-header">
+            <span class="status-card-icon">&#x1F321;</span>
+            <span class="status-card-label">Teplota trysky</span>
+          </div>
+          <div class="status-value">
+            <input type="number" id="nozzle-temp" class="status-input" value="0" min="0" max="300"> <span class="status-unit">&deg;C</span>
+          </div>
+          <div class="status-range">Max: 300&deg;C</div>
+          <div class="progress-bar"><div class="progress-fill" id="nozzle-bar" style="width:0%"></div></div>
+        </div>
+
+        <!-- Bed Temp -->
+        <div class="status-card">
+          <div class="status-card-header">
+            <span class="status-card-icon">&#x1F525;</span>
+            <span class="status-card-label">Teplota podlo&zcaron;ky</span>
+          </div>
+          <div class="status-value">
+            <input type="number" id="bed-temp" class="status-input" value="0" min="0" max="80"> <span class="status-unit">&deg;C</span>
+          </div>
+          <div class="status-range">Max: 80&deg;C</div>
+          <div class="progress-bar"><div class="progress-fill" id="bed-bar" style="width:0%"></div></div>
+        </div>
+
+        <!-- Print Progress -->
+        <div class="status-card">
+          <div class="status-card-header">
+            <span class="status-card-icon">&#x23F3;</span>
+            <span class="status-card-label">Priebeh tla&ccaron;e</span>
+          </div>
+          <div class="status-value">
+            <input type="number" id="print-progress" class="status-input" value="0" min="0" max="100"> <span class="status-unit">%</span>
+          </div>
+          <div class="progress-bar progress-bar--accent"><div class="progress-fill progress-fill--accent" id="progress-bar" style="width:0%"></div></div>
+        </div>
+
+        <!-- Print Speed -->
+        <div class="status-card">
+          <div class="status-card-header">
+            <span class="status-card-icon">&#x26A1;</span>
+            <span class="status-card-label">R&yacute;chlos&tcaron; tla&ccaron;e</span>
+          </div>
+          <div class="status-value">
+            <input type="number" id="print-speed" class="status-input" value="0" min="0" max="500"> <span class="status-unit">mm/s</span>
+          </div>
+          <div class="status-range">Max: 500 mm/s</div>
+        </div>
+
+        <!-- Filament -->
+        <div class="status-card">
+          <div class="status-card-header">
+            <span class="status-card-icon">&#x1F9F5;</span>
+            <span class="status-card-label">Filament</span>
+          </div>
+          <div class="status-select-wrap">
+            <select id="filament-type" class="fs-select">
+              <option value="PLA">PLA</option>
+              <option value="PETG">PETG</option>
+              <option value="TPU">TPU</option>
+              <option value="PVA">PVA</option>
+              <option value="none">Nezalo&zcaron;en&yacute;</option>
+            </select>
+          </div>
+          <div class="status-range" style="margin-top:8px">Podporovan&eacute;: PLA, PETG, TPU, PVA</div>
+        </div>
+
+        <!-- Total Print Hours -->
+        <div class="status-card">
+          <div class="status-card-header">
+            <span class="status-card-icon">&#x23F1;</span>
+            <span class="status-card-label">Celkov&eacute; hodiny tla&ccaron;e</span>
+          </div>
+          <div class="status-value">
+            <input type="number" id="total-hours" class="status-input" value="0" min="0" step="0.5"> <span class="status-unit">hod</span>
+          </div>
+        </div>
+
+        <!-- Total Prints -->
+        <div class="status-card">
+          <div class="status-card-header">
+            <span class="status-card-icon">&#x1F4E6;</span>
+            <span class="status-card-label">Po&ccaron;et tla&ccaron;&iacute;</span>
+          </div>
+          <div class="status-value">
+            <input type="number" id="total-prints" class="status-input" value="0" min="0"> <span class="status-unit">ks</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary save-btn" id="save-status-btn">
+        Ulo&zcaron;i&tcaron; stav
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- MAINTENANCE LOG -->
+  <section class="section section--alt" id="maintenance-log">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Servis</div>
+        <div class="section-title">Servisn&yacute; a oprav&aacute;rensk&yacute; z&aacute;znam</div>
+      </div>
+
+      <!-- Add Log Entry Form -->
+      <div class="log-form">
+        <div class="log-form-row">
+          <div class="fs-field">
+            <label class="fs-label" for="log-date">D&aacute;tum</label>
+            <input type="date" id="log-date" class="fs-input">
+          </div>
+          <div class="fs-field">
+            <label class="fs-label" for="log-type">Typ</label>
+            <select id="log-type" class="fs-select">
+              <option value="maintenance">&Uacute;dr&zcaron;ba</option>
+              <option value="repair">Oprava</option>
+              <option value="upgrade">Vylep&scaron;enie</option>
+              <option value="note">Pozn&aacute;mka</option>
+            </select>
+          </div>
+        </div>
+        <div class="fs-field">
+          <label class="fs-label" for="log-desc">Popis</label>
+          <textarea id="log-desc" class="fs-textarea" placeholder="Napr. Mazanie Y-osi, v&yacute;mena trysky, &ccaron;istenie extrudera..."></textarea>
+        </div>
+        <button class="btn-primary" id="add-log-btn">
+          Prida&tcaron; z&aacute;znam
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+
+      <!-- Log Table -->
+      <div class="log-table-wrap">
+        <table class="log-table" id="log-table">
+          <thead>
+            <tr>
+              <th>D&aacute;tum</th>
+              <th>Typ</th>
+              <th>Popis</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="log-tbody">
+          </tbody>
+        </table>
+        <div class="log-empty" id="log-empty">
+          &Zcaron;iadne z&aacute;znamy. Prid&aacute;jte prv&yacute; servisn&yacute; z&aacute;znam vy&scaron;&scaron;ie.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAINTENANCE REMINDERS -->
+  <section class="section" id="reminders">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Pripomienky</div>
+        <div class="section-title">&Uacute;dr&zcaron;ba pod&iacute;a odpor&uacute;&ccaron;an&iacute; Bambu Lab</div>
+      </div>
+
+      <p class="info-text">
+        Pod&iacute;a <a href="https://wiki.bambulab.com/en/a1-mini/maintenance/period-maintenance" target="_blank" rel="noopener">ofici&aacute;lnych odpor&uacute;&ccaron;an&iacute;</a> Bambu Lab je pravideln&aacute; &uacute;dr&zcaron;ba kl&uacute;&ccaron;ov&aacute; pre dlh&uacute; &zcaron;ivotnos&tcaron; tla&ccaron;iarne.
+      </p>
+
+      <div class="reminders-grid" id="reminders-grid">
+        <!-- Reminders will be rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNICAL SPECS -->
+  <section class="section section--alt" id="specs">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Technick&eacute; &uacute;daje</div>
+        <div class="section-title">Bambu Lab A1 mini &ndash; &Scaron;pecifik&aacute;cie</div>
+      </div>
+
+      <p class="info-text">
+        Zdroj: <a href="https://wiki.bambulab.com/en/a1-mini" target="_blank" rel="noopener">wiki.bambulab.com/en/a1-mini</a>
+      </p>
+
+      <div class="specs-grid">
+        <div class="spec-group">
+          <h3 class="spec-group-title">Telo</h3>
+          <table class="spec-table">
+            <tr><td>Objem tla&ccaron;e (W&times;D&times;H)</td><td>180 &times; 180 &times; 180 mm</td></tr>
+            <tr><td>Kon&scaron;trukcia</td><td>Oce&iacute; + extr&uacute;dovan&yacute; hlin&iacute;k</td></tr>
+            <tr><td>Pohybov&yacute; syst&eacute;m</td><td>Kart&eacute;zsky (Bed Slinger)</td></tr>
+            <tr><td>Rozmery</td><td>347 &times; 315 &times; 365 mm</td></tr>
+            <tr><td>Hmotnos&tcaron;</td><td>5.5 kg</td></tr>
+          </table>
+        </div>
+
+        <div class="spec-group">
+          <h3 class="spec-group-title">Toolhead</h3>
+          <table class="spec-table">
+            <tr><td>Hotend</td><td>Celokovov&yacute; (integrovan&yacute;)</td></tr>
+            <tr><td>Tryska</td><td>Nerezov&aacute; oce&iacute; 0.4 mm</td></tr>
+            <tr><td>Volite&iacute;n&eacute; trysky</td><td>0.2, 0.6, 0.8 mm</td></tr>
+            <tr><td>Max teplota trysky</td><td>300 &deg;C</td></tr>
+            <tr><td>Extruder</td><td>K&aacute;len&aacute; oce&iacute; (Direct Drive)</td></tr>
+            <tr><td>Reza&ccaron;ka filamentu</td><td>&Aacute;no</td></tr>
+            <tr><td>Priemer filamentu</td><td>1.75 mm</td></tr>
+          </table>
+        </div>
+
+        <div class="spec-group">
+          <h3 class="spec-group-title">V&yacute;kon</h3>
+          <table class="spec-table">
+            <tr><td>Max r&yacute;chlos&tcaron; toolheadu</td><td>500 mm/s</td></tr>
+            <tr><td>Max akeler&aacute;cia</td><td>10 000 mm/s&sup2;</td></tr>
+            <tr><td>Max prietok hotendu</td><td>28 mm&sup3;/s (ABS@280&deg;C)</td></tr>
+            <tr><td>Max teplota podlo&zcaron;ky</td><td>80 &deg;C</td></tr>
+          </table>
+        </div>
+
+        <div class="spec-group">
+          <h3 class="spec-group-title">Senzory a funkcie</h3>
+          <table class="spec-table">
+            <tr><td>Kamera</td><td>A&zcaron; 1080p + Timelapse</td></tr>
+            <tr><td>Senzor filamentu</td><td>&Aacute;no (run-out + tangle)</td></tr>
+            <tr><td>Odometria filamentu</td><td>&Aacute;no</td></tr>
+            <tr><td>Obnova po v&yacute;padku</td><td>&Aacute;no</td></tr>
+            <tr><td>Auto kalibr&aacute;cia</td><td>&Aacute;no (pln&aacute;)</td></tr>
+            <tr><td>AMS Lite kompatibilita</td><td>&Aacute;no (4-farebn&aacute; tla&ccaron;)</td></tr>
+          </table>
+        </div>
+
+        <div class="spec-group">
+          <h3 class="spec-group-title">Podporovan&eacute; materi&aacute;ly</h3>
+          <table class="spec-table">
+            <tr><td>Ide&aacute;lne</td><td>PLA, PETG, TPU, PVA</td></tr>
+            <tr><td>Neodpor&uacute;&ccaron;an&eacute;</td><td>ABS, ASA, PC, PA</td></tr>
+          </table>
+        </div>
+
+        <div class="spec-group">
+          <h3 class="spec-group-title">Odkazy</h3>
+          <table class="spec-table">
+            <tr><td><a href="https://wiki.bambulab.com/en/a1-mini/manual/intro-a1-mini" target="_blank">Intro &amp; komponenty</a></td><td></td></tr>
+            <tr><td><a href="https://wiki.bambulab.com/en/a1-mini/maintenance" target="_blank">&Uacute;dr&zcaron;ba &amp; n&aacute;vody</a></td><td></td></tr>
+            <tr><td><a href="https://wiki.bambulab.com/en/a1-mini/maintenance/period-maintenance" target="_blank">Periodick&aacute; &uacute;dr&zcaron;ba</a></td><td></td></tr>
+            <tr><td><a href="https://wiki.bambulab.com/en/a1-mini/maintenance/lubricate-y-axis" target="_blank">Mazanie Y-osi</a></td><td></td></tr>
+            <tr><td><a href="https://wiki.bambulab.com/en/a1-mini/maintenance/clean-hotend-assembly" target="_blank">&Ccaron;istenie hotendu</a></td><td></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">A1<span>mini</span> Monitor</div>
+      <div class="footer-info">
+        Bambu Lab A1 mini &middot; Zdroj: <a href="https://wiki.bambulab.com/en/a1-mini" target="_blank">wiki.bambulab.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
